@@ -17,14 +17,17 @@ export default defineConfig(({ command }) => ({
     rollupOptions: {
       external: [],
       output: {
-        manualChunks: {
-          three: ["three", "@react-three/fiber", "@react-three/drei"],
+        manualChunks(id: string): string | undefined {
+          if (
+            id.includes("node_modules/three/") ||
+            id.includes("node_modules/@react-three/")
+          ) {
+            return "three";
+          }
+          return undefined;
         },
       },
     },
-  },
-  esbuild: {
-    target: "ES2020",
   },
   test: {
     globals: true,
