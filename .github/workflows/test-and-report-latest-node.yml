@@ -1,0 +1,267 @@
+name: Test and Report Latest Node
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+# Set default permissions to read-only
+permissions: read-all
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    # Only needs read permissions
+    permissions:
+      contents: read # Required to check out code
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: "25"
+          cache: "npm"
+
+      - name: Cache apt packages
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        with:
+          path: /var/cache/apt/archives
+          key: ${{ runner.os }}-apt-${{ hashFiles('.github/workflows/test-and-report.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-apt-
+
+      - name: Setup display and dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2t64 libxtst6 xauth
+          sudo mkdir -p /var/run/dbus
+          sudo dbus-daemon --system --fork
+
+      - name: Cache dependencies
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Cache Cypress binary
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-
+
+      - name: Verify Cypress
+        run: npx cypress verify
+
+  build-validation:
+    needs: prepare
+    runs-on: ubuntu-latest
+    # Needs write permissions to upload artifacts
+    permissions:
+      contents: write # Required to check out code
+      actions: read # Required to use GitHub actions
+      id-token: write # Required for attestation
+      pull-requests: write # Required to upload artifacts (implicit permission)
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: "25"
+          cache: "npm"
+
+      - name: Cache dependencies
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache build artifacts
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        with:
+          path: dist
+          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('src/**/*') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-build-
+
+      - name: Build application
+        run: npm run build
+
+      - name: Check licenses
+        run: npm run test:licenses
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@57aae528053a48a3f6235f2d9461b05fbcb7366d # v0.23.1
+        id: sbom
+        with:
+          format: spdx-json
+          output-file: game.spdx.json
+          artifact-name: game
+
+
+      - name: Install SBOMQS
+        run: |
+          curl -LO https://github.com/interlynk-io/sbomqs/releases/download/v1.2.0/sbomqs-linux-amd64
+          sudo mv sbomqs-linux-amd64 /usr/local/bin/sbomqs
+          sudo chmod a+x /usr/local/bin/sbomqs
+
+      - name: Details SBOM Quality
+        run: sbomqs score game.spdx.json --detailed
+
+      - name: Check SBOM Quality
+        run: |
+          score=$(sbomqs score game.spdx.json --json | jq '.files[0].avg_score')
+          echo "SBOM Score: $score/10"
+          
+          if (( $(echo "$score < 7.0" | bc -l) )); then
+            echo "::error::SBOM quality score too low: $score"
+            exit 1
+          fi
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: build-output
+          path: dist
+          if-no-files-found: error
+
+  unit-tests:
+    needs: [prepare, build-validation]
+    runs-on: ubuntu-latest
+    # Needs write permissions to upload artifacts
+    permissions:
+      contents: write # Required to check out code
+      actions: read # Required to use GitHub actions
+      checks: write # Required to upload artifacts (implicit permission)
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: "25"
+          cache: "npm"
+
+      - name: Cache dependencies
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run unit tests with coverage
+        run: npm run test:ci
+        env:
+          JEST_JUNIT_OUTPUT_DIR: "coverage"
+          JEST_JUNIT_OUTPUT_NAME: "junit.xml"
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: coverage-report
+          path: coverage
+          if-no-files-found: error
+
+  e2e-tests:
+    needs: [prepare, build-validation]
+    runs-on: ubuntu-latest
+    # Needs write permissions to upload artifacts
+    permissions:
+      contents: write # Required to check out code
+      actions: read # Required to use GitHub actions
+      checks: write # Required to upload artifacts (implicit permission)
+      pull-requests: write
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: "25"
+          cache: "npm"
+
+      - name: Cache Cypress binary
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Start app and run Cypress tests
+        run: |
+          xvfb-run --auto-servernum --server-args="-screen 0 1280x720x24" npm run test:e2e
+        env:
+          CYPRESS_VIDEO: true
+
+      - name: Upload Cypress results
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: cypress-results
+          path: |
+            cypress/videos
+            cypress/screenshots
+            cypress/results
+
+  report:
+    needs: [unit-tests, e2e-tests]
+    runs-on: ubuntu-latest
+    if: always()
+    # Needs write permissions to upload artifacts
+    permissions:
+      contents: write # Required to check out code
+      actions: read # Required to use GitHub actions
+      checks: write # Required to upload artifacts (implicit permission)
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
+        with:
+          egress-policy: audit
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          path: artifacts
+
+      - name: Upload combined reports
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: test-reports
+          path: |
+            coverage
+            artifacts/cypress-results
