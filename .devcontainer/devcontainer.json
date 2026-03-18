@@ -8,7 +8,7 @@
       "version": "25"
     }
   },
-  // MCP Servers: See .github/mcp-config.json for Model Context Protocol configuration
+  // MCP Servers: See .github/copilot-mcp.json for Model Context Protocol configuration
   // These enhance GitHub Copilot with filesystem, git, github, and search capabilities
   // Update system dependencies
   "onCreateCommand": "sudo apt-get update && sudo apt-get install -y graphviz libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb dbus dbus-x11",

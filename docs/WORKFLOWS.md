@@ -54,11 +54,13 @@ Sets up the environment shared by downstream jobs.
 | Harden runner | `step-security/harden-runner` (egress-policy: audit) |
 | Checkout | `actions/checkout@v6.0.2` |
 | Setup Node.js 25 | `actions/setup-node@v6.3.0` with `cache: npm` |
-| Cache apt packages | `actions/cache@v5.0.3` |
+| Cache apt packages | `actions/cache@v5.0.3` ⚠️ |
 | Install system deps | xvfb, libgtk, Chrome dependencies |
 | Install dependencies | `npm install` |
 | Cache Cypress binary | `actions/cache@v5.0.3` (`~/.cache/Cypress`) |
 | Verify Cypress | `npx cypress verify` |
+
+> **Note:** The apt package cache (`/var/cache/apt/archives`) may produce `tar: exit code 2` warnings on GitHub-hosted runners when cached files disappear during packaging. This is cosmetic and does not affect correctness, but may add noise to CI logs. `actions/setup-node` with `cache: npm` handles npm caching, so no separate `~/.npm` cache step is needed.
 
 **Permissions:** `contents: read`
 
