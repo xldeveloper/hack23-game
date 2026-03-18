@@ -56,7 +56,6 @@ Sets up the environment shared by downstream jobs.
 | Setup Node.js 25 | `actions/setup-node@v6.3.0` with `cache: npm` |
 | Cache apt packages | `actions/cache@v5.0.3` |
 | Install system deps | xvfb, libgtk, Chrome dependencies |
-| Cache npm | `actions/cache@v5.0.3` (`~/.npm`) |
 | Install dependencies | `npm install` |
 | Cache Cypress binary | `actions/cache@v5.0.3` (`~/.cache/Cypress`) |
 | Verify Cypress | `npx cypress verify` |
