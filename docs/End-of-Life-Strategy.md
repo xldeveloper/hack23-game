@@ -23,8 +23,8 @@ This document defines the strategy for managing Node.js runtime versions in the 
 
 The OpenJS Foundation follows a predictable release schedule:
 
-- **Every October** — A new major version is published as "Current"
-- **Every April** — Odd-numbered Current versions reach EOL; Even-numbered versions graduate to "Active LTS"
+- **Every April** — A new **even-numbered** major version is published as "Current"; odd-numbered Current versions reach EOL
+- **Every October** — The April even-numbered release graduates to "Active LTS", and a new odd-numbered major is published as "Current"
 - **Active LTS** lasts 12 months; **Maintenance LTS** lasts an additional 18 months
 
 ```

@@ -4,7 +4,7 @@
 
 This document describes the planned upgrade of all CI/CD workflows, devcontainer configuration, and documentation from **Node.js 25** to **Node.js 26**.
 
-Node.js 26 is expected in **April 2026** — approximately **2 weeks** from the current date (March 18, 2026). This upgrade plan is designed to be executed immediately after the official Node.js 26 release.
+Node.js 26 is expected in **April 2026**. This upgrade plan is designed to be executed immediately after the official Node.js 26 release.
 
 ---
 

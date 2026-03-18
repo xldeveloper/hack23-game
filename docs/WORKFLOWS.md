@@ -242,7 +242,7 @@ Reference workflow that documents and validates the full Copilot development env
 ## Security Practices Applied to All Workflows
 
 1. **Hardened runners** — `step-security/harden-runner` with egress auditing on every job
-2. **Pinned action versions** — all actions pinned to full SHA digest
+2. **Pinned action versions** — workflow files pin actions to full SHA digests (version labels in docs are human-readable references)
 3. **Minimal permissions** — `permissions: read-all` at top level, elevated only per-job as needed
 4. **Supply chain attestation** — SBOM and build provenance on every release
 5. **SBOM quality gate** — minimum score of 7.0/10 enforced in CI
