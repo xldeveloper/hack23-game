@@ -34,7 +34,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
-          node-version: '24'
+          node-version: '25'
           cache: 'npm'
 
       - name: Cache dependencies
@@ -214,7 +214,7 @@ jobs:
           - [ ] Brave Search Server - Requires API key
           
           ### System Dependencies
-          - [x] Node.js 24
+          - [x] Node.js 25
           - [x] Build tools
           - [x] Display server (Xvfb)
           - [x] Cypress dependencies
