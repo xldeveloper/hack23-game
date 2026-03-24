@@ -11,7 +11,8 @@ describe("Security Headers in Built HTML", () => {
       htmlContent = fs.readFileSync(htmlPath, "utf-8");
     } catch (err) {
       throw new Error(
-        `Could not read index.html at ${htmlPath}. Did you run the build? Original error: ${err instanceof Error ? err.message : String(err)}`
+        `Could not read index.html at ${htmlPath}. Did you run the build?`,
+        { cause: err }
       );
     }
   });
