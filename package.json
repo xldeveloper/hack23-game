@@ -1,7 +1,7 @@
 {
   "name": "game-app",
   "private": true,
-  "version": "1.2.36",
+  "version": "1.2.37",
   "type": "module",
   "scripts": {
     "dev": "vite --host --open",
