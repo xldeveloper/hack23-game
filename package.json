@@ -20,18 +20,18 @@
     "node": ">=25"
   },
   "files": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.css",
-    "src/**/*.d.ts",
+    "src/",
     "public/",
     "index.html",
     "tsconfig.json",
     "tsconfig.app.json",
     "tsconfig.node.json",
+    "tsconfig.test.json",
     "vite.config.ts",
-    "README.md",
-    "LICENSE"
+    "vitest.config.ts",
+    "eslint.config.js",
+    "typedoc.json",
+    "README.md"
   ],
   "dependencies": {
     "@react-three/drei": "10.7.7",
