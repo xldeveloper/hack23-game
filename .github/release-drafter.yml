@@ -92,7 +92,7 @@ template: |
   ## Game Development Stack
   - ⚡ **Vite** - Fast build tool and dev server
   - ⚛️ **React 19** - Modern React with hooks  
-  - 🔷 **TypeScript** - Strict typing with latest standards
+  - 🔷 **TypeScript 6** - Strict typing with latest standards
   - 🎮 **Three.js** - High-performance 3D WebGL renderer
   - 🎨 **@react-three/fiber** - React renderer for Three.js
   - 🧪 **Vitest** - Fast unit testing with coverage

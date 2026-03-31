@@ -98,7 +98,8 @@ sed -i 's/"version": "25"/"version": "26"/' .devcontainer/devcontainer.json
 | `vite` | May ship Node.js 26 support update | Check release notes |
 | `cypress` | Historically supports new Node quickly | Verify with `npx cypress verify` |
 | `vitest` | Tracks Vite compatibility | Validate test suite passes |
-| `typescript` | Generally Node-agnostic | No action expected |
+| `typescript` | Currently 6.0.2; generally Node-agnostic | No action expected |
+| `@typescript-eslint` | Currently supports `typescript <6.1.0` | Must update before TS 6.1 |
 
 ### V8 Engine Changes (Node.js 26)
 
@@ -139,6 +140,33 @@ The project can safely remain on Node.js 25 until **June 1, 2026** (security EOL
 | Node.js 25 security EOL | June 2026 | Must be on 26 by this date |
 | Node.js 28 LTS | April 2027 | Next LTS evaluation |
 | Node.js 26 EOL | April 2029 | Migrate to 28 before this date |
+
+---
+
+## TypeScript Upgrade Planning
+
+### Current State
+
+TypeScript **6.0.2** is in use. The `@typescript-eslint 8.58.0` peer dependency constraint is `typescript >=4.8.4 <6.1.0`.
+
+### TypeScript 6.1 Upgrade (Expected ~June 2026)
+
+When TypeScript 6.1 is released:
+
+1. **Check `@typescript-eslint` compatibility** — version 8.58.0 requires `<6.1.0`; a newer release will be needed
+2. **Update `@typescript-eslint`** to a version supporting TS 6.1
+3. **Update `package.json`** — change `typescript` to the new version
+4. **Run full validation** — `npm run build`, `npm run lint`, `npm run test`
+5. **Review breaking changes** — consult [TypeScript release notes](https://devblogs.microsoft.com/typescript/)
+
+### TypeScript 7.0 Upgrade (Expected ~2027)
+
+Major version upgrades may require:
+
+- Code changes for stricter type checking
+- `tsconfig.json` updates for new compiler options
+- `@typescript-eslint` major version upgrade
+- Dedicated PR with full test suite validation
 
 ---
 
