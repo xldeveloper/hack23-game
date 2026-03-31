@@ -75,8 +75,8 @@ export function useGameState(initialState?: Partial<GameState>): UseGameStateRet
     };
   });
 
-  const comboTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const gameTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const comboTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const gameTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const animationFrameRef = useRef<number | null>(null);
 
   // Cleanup timers on unmount

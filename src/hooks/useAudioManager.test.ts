@@ -36,8 +36,8 @@ class MockAudioContext {
   sampleRate = 48000;
 }
 
-global.AudioContext = MockAudioContext as unknown as typeof AudioContext;
-global.URL.createObjectURL = vi.fn().mockReturnValue("mock-blob-url");
+globalThis.AudioContext = MockAudioContext as unknown as typeof AudioContext;
+globalThis.URL.createObjectURL = vi.fn().mockReturnValue("mock-blob-url");
 
 describe("useAudioManager", () => {
   beforeEach(() => {
