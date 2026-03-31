@@ -44,7 +44,7 @@ For complete security policy mapping and detailed compliance information, see:
 
 - ⚡ **Vite** - Fast build tool and dev server
 - ⚛️ **React 19** - Modern React with hooks
-- 🔷 **TypeScript 6** - Strict typing with latest standards
+- 🔷 **TypeScript 6** - Strict typing with ES2025 target
 - 🧪 **Vitest** - Fast unit testing with coverage
 - 🌲 **Cypress** - Reliable E2E testing
 - 📦 **ESLint** - Code linting with TypeScript rules
@@ -53,6 +53,7 @@ For complete security policy mapping and detailed compliance information, see:
 - 🎨 **@react-three/fiber** - React renderer for Three.js
 - 🛠️ **@react-three/drei** - Useful helpers for react-three-fiber
 - 🎵 **Howler.js** - Audio library for games
+- 📖 **TypeDoc** - API documentation generation with ISMS references
 
 ## 🤖 GitHub Copilot Custom Agents & Skills
 
@@ -478,6 +479,9 @@ npm run test:e2e
 
 # Check license compliance
 npm run test:licenses
+
+# Generate API documentation
+npm run docs:api
 ```
 
 ## Three.js Integration

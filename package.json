@@ -13,11 +13,26 @@
     "coverage": "vitest run --coverage --coverage.reportOnFailure",
     "test:ci": "vitest run --coverage --reporter=junit --outputFile=coverage/junit.xml",
     "test:e2e": "mkdir -p cypress/results && start-server-and-test dev http://localhost:5173 'cypress run --reporter cypress-multi-reporters --reporter-options configFile=cypress.config.reporter.json'",
-    "test:e2e:ci": "mkdir -p cypress/results && start-server-and-test dev http://localhost:5173 'cypress run --headless --reporter cypress-multi-reporters --reporter-options configFile=cypress.config.reporter.json'"
+    "test:e2e:ci": "mkdir -p cypress/results && start-server-and-test dev http://localhost:5173 'cypress run --headless --reporter cypress-multi-reporters --reporter-options configFile=cypress.config.reporter.json'",
+    "docs:api": "typedoc"
   },
   "engines": {
     "node": ">=25"
   },
+  "files": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.css",
+    "src/**/*.d.ts",
+    "public/",
+    "index.html",
+    "tsconfig.json",
+    "tsconfig.app.json",
+    "tsconfig.node.json",
+    "vite.config.ts",
+    "README.md",
+    "LICENSE"
+  ],
   "dependencies": {
     "@react-three/drei": "10.7.7",
     "@react-three/fiber": "9.5.0",
@@ -52,6 +67,7 @@
     "jsdom": "29.0.1",
     "license-compliance": "3.0.1",
     "start-server-and-test": "3.0.0",
+    "typedoc": "0.28.18",
     "typescript": "6.0.2",
     "typescript-eslint": "8.58.0",
     "vite": "8.0.3",
