@@ -44,7 +44,7 @@ For complete security policy mapping and detailed compliance information, see:
 
 - ⚡ **Vite** - Fast build tool and dev server
 - ⚛️ **React 19** - Modern React with hooks
-- 🔷 **TypeScript** - Strict typing with latest standards
+- 🔷 **TypeScript 6** - Strict typing with latest standards
 - 🧪 **Vitest** - Fast unit testing with coverage
 - 🌲 **Cypress** - Reliable E2E testing
 - 📦 **ESLint** - Code linting with TypeScript rules

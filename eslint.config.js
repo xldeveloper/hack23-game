@@ -15,6 +15,7 @@ export default tseslint.config(
         project: [
           "./tsconfig.app.json",
           "./tsconfig.node.json",
+          "./tsconfig.test.json",
           "./cypress/tsconfig.json",
         ],
         tsconfigRootDir: import.meta.dirname,

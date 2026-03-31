@@ -5,6 +5,7 @@
 This document describes all GitHub Actions workflows in the **game** project. All workflows follow the security-first principles defined in the [Hack23 ISMS Secure Development Policy](https://github.com/Hack23/ISMS-PUBLIC) and use hardened runners via `step-security/harden-runner`.
 
 **Current Node.js version: 25**
+**Current TypeScript version: 6.0.2**
 
 ---
 

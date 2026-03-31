@@ -1,14 +1,16 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import * as fs from "fs";
-import * as path from "path";
+import { readFileSync } from "node:fs";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
 describe("Security Headers in Built HTML", () => {
-  const htmlPath: string = path.resolve(__dirname, "../../index.html");
+  const currentDir: string = dirname(fileURLToPath(import.meta.url));
+  const htmlPath: string = resolve(currentDir, "../../index.html");
   let htmlContent: string;
 
   beforeAll(() => {
     try {
-      htmlContent = fs.readFileSync(htmlPath, "utf-8");
+      htmlContent = readFileSync(htmlPath, "utf-8");
     } catch (err) {
       throw new Error(
         `Could not read index.html at ${htmlPath}. Did you run the build?`,
