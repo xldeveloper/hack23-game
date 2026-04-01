@@ -1,0 +1,57 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    "src/main.tsx",
+    "src/App.tsx",
+    "src/hooks/useAudioManager.ts",
+    "src/hooks/useGameState.ts",
+    "src/utils/gameConfig.ts",
+    "src/utils/targetPhysics.ts"
+  ],
+  "out": "docs/api",
+  "tsconfig": "tsconfig.app.json",
+  "name": "Game Template API Documentation",
+  "readme": "README.md",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeInternal": false,
+  "excludeExternals": true,
+  "categorizeByGroup": true,
+  "searchInComments": true,
+  "searchInDocuments": true,
+  "highlightLanguages": [
+    "bash",
+    "console",
+    "css",
+    "html",
+    "javascript",
+    "json",
+    "jsonc",
+    "markdown",
+    "mermaid",
+    "tsx",
+    "typescript",
+    "yaml"
+  ],
+  "navigationLinks": {
+    "GitHub": "https://github.com/Hack23/game",
+    "ISMS Policies": "https://github.com/Hack23/ISMS-PUBLIC"
+  },
+  "sidebarLinks": {
+    "ISMS Policy Mapping": "https://github.com/Hack23/game/blob/main/docs/ISMS_POLICY_MAPPING.md",
+    "Security Policy": "https://github.com/Hack23/game/blob/main/SECURITY.md",
+    "Security Headers": "https://github.com/Hack23/game/blob/main/SECURITY_HEADERS.md",
+    "Architecture": "https://github.com/Hack23/game/blob/main/docs/MCP_ARCHITECTURE.md"
+  },
+  "projectDocuments": [
+    "SECURITY.md",
+    "SECURITY_HEADERS.md",
+    "docs/ISMS_POLICY_MAPPING.md",
+    "docs/WORKFLOWS.md",
+    "docs/End-of-Life-Strategy.md"
+  ],
+  "plugin": [],
+  "hideGenerator": false,
+  "cleanOutputDir": true
+}
