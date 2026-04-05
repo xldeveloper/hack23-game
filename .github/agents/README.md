@@ -1,315 +1,54 @@
 # GitHub Copilot Custom Agents
 
-This directory contains custom agent configurations for GitHub Copilot coding agent. Each agent is specialized for different aspects of game development and provides expert guidance following the project's standards.
+Custom agent configurations for GitHub Copilot coding agent, specialized for this game template.
 
-## 🆕 What's New: Agent Skills Support
+## Available Agents
 
-**December 2025 Update:** This repository now includes **GitHub Copilot Agent Skills** in `.github/skills/`!
+| Agent | Expertise | Tools |
+|-------|-----------|-------|
+| 🎮 **[game-developer](game-developer.md)** | Three.js + @react-three/fiber, game loops, 60fps performance | view, edit, create, bash, custom-agent |
+| 🎨 **[frontend-specialist](frontend-specialist.md)** | React 19, strict TypeScript, component architecture | view, edit, create, bash, custom-agent |
+| 🧪 **[test-engineer](test-engineer.md)** | Vitest, Cypress, React Testing Library, 80%+ coverage | view, edit, create, bash, search_code, custom-agent |
+| 🔒 **[security-specialist](security-specialist.md)** | OSSF Scorecard, SLSA, OWASP, ISMS compliance | view, edit, bash, search_code, custom-agent |
+| 📝 **[documentation-writer](documentation-writer.md)** | JSDoc, READMEs, Mermaid diagrams, ISMS docs | view, edit, create, search_code, custom-agent |
+| 🎯 **[product-task-agent](product-task-agent.md)** | Product analysis, issue creation, agent coordination | view, edit, create, bash, search_code, custom-agent |
 
-**Skills vs Agents:**
-- **Skills** = Reusable patterns and rules (e.g., "How to test Three.js components")
-- **Agents** = Specialized experts (e.g., `game-developer` for Three.js work)
+## Agent-Skill Integration
 
-**Learn more:** See [Skills Documentation](../skills/README.md)
+| Agent | Primary Skills | Secondary Skills |
+|-------|---------------|------------------|
+| 🎮 game-developer | react-threejs-game, performance-optimization | testing-strategy |
+| 🎨 frontend-specialist | performance-optimization | testing-strategy, documentation-standards |
+| 🧪 test-engineer | testing-strategy | react-threejs-game, performance-optimization |
+| 🔒 security-specialist | security-by-design, isms-compliance | testing-strategy |
+| 📝 documentation-writer | documentation-standards | isms-compliance |
+| 🎯 product-task-agent | All 6 skills | — |
 
-## 🎯 Available Agents
-
-### 🎯 product-task-agent
-**Expert in product analysis, quality improvement, and GitHub issue creation**
-
-Specialized in:
-- Product quality analysis across code, UI/UX, security, and performance
-- Creating well-structured GitHub issues with proper labels and assignments
-- Coordinating between specialized agents for task implementation
-- ISMS compliance verification and security alignment
-- Using GitHub MCP, Playwright, and AWS tools for comprehensive analysis
-- Identifying improvements and creating actionable tasks
-
-**Tools:** `view`, `edit`, `create`, `bash`, `search_code`, `custom-agent`
-
-**Key Capabilities:**
-- 🔍 Analyze codebase for quality, security, and UX improvements
-- 📝 Create structured GitHub issues with clear acceptance criteria
-- 🤝 Assign tasks to appropriate specialized agents
-- 🔒 Verify ISMS policy alignment and compliance
-- 🎭 Use Playwright for UI/UX testing and analysis
-- 📊 Generate comprehensive product improvement plans
-
----
-
-### 🎮 game-developer
-**Expert in Three.js game development with React integration**
-
-Specialized in:
-- Three.js with @react-three/fiber and @react-three/drei
-- Game loop implementation with useFrame
-- 3D scene composition and event handling
-- Audio integration with Howler.js
-- Performance optimization for 60fps 3D games
-- Strict TypeScript typing for game components
-
-**Tools:** `view`, `edit`, `create`, `bash`, `custom-agent`
-
----
-
-### 🎨 frontend-specialist
-**Expert in React and UI development with strict TypeScript**
-
-Specialized in:
-- React 19 features and modern hooks
-- Strict TypeScript typing and best practices
-- Component-based architecture
-- State management and Context API
-- Frontend testing with Vitest and React Testing Library
-- Vite build optimization
-
-**Tools:** `view`, `edit`, `create`, `bash`, `custom-agent`
-
----
-
-### 🧪 test-engineer
-**Expert in comprehensive testing strategies and quality assurance**
-
-Specialized in:
-- Unit testing with Vitest and jsdom
-- E2E testing with Cypress
-- React Testing Library best practices
-- Test coverage and quality metrics (80%+ target)
-- Testing 3D game interactions
-- CI/CD integration and test automation
-
-**Tools:** `view`, `edit`, `create`, `bash`, `search_code`, `custom-agent`
-
----
-
-### 🔒 security-specialist
-**Expert in security, compliance, and supply chain protection**
-
-Specialized in:
-- Supply chain security (OSSF Scorecard, SLSA)
-- License compliance verification
-- SBOM quality validation
-- Secure coding practices and OWASP guidelines
-- CodeQL and vulnerability scanning
-- Dependency management and audit
-- [ISMS-PUBLIC](https://github.com/Hack23/ISMS-PUBLIC) policy compliance
-- Security documentation aligned with [Secure Development Policy](https://github.com/Hack23/ISMS-PUBLIC/blob/main/Secure_Development_Policy.md)
-
-**Tools:** `view`, `edit`, `bash`, `search_code`, `custom-agent`
-
----
-
-### 📝 documentation-writer
-**Expert in technical documentation and user guides**
-
-Specialized in:
-- README and project documentation
-- API documentation with JSDoc
-- Security documentation (SECURITY.md)
-- Code comments and inline documentation
-- User guides and tutorials
-- Mermaid diagrams and architecture docs
-
-**Tools:** `view`, `edit`, `create`, `search_code`, `custom-agent`
-
----
-
-## 🔄 Agent Workflow
+## Workflow
 
 ```mermaid
 graph TB
     User[Developer Request] --> Copilot[GitHub Copilot]
-    Copilot --> AgentSelect{Select Agent}
-    
-    AgentSelect -->|Product Analysis| TaskAgent[🎯 product-task-agent]
-    AgentSelect -->|3D Game Code| GameDev[🎮 game-developer]
-    AgentSelect -->|UI/React Code| Frontend[🎨 frontend-specialist]
-    AgentSelect -->|Testing| TestEng[🧪 test-engineer]
-    AgentSelect -->|Security| Security[🔒 security-specialist]
-    AgentSelect -->|Documentation| DocWriter[📝 documentation-writer]
-    
-    TaskAgent --> Tools[Agent Tools]
-    GameDev --> Tools
-    Frontend --> Tools
-    TestEng --> Tools
-    Security --> Tools
-    DocWriter --> Tools
-    
-    Tools --> MCP[MCP Servers]
-    MCP --> FS[📁 Filesystem]
-    MCP --> GH[🐙 GitHub]
-    MCP --> Git[📋 Git]
-    MCP --> PW[🎭 Playwright]
-    
-    Tools --> Output[Code/Docs/Tests/Issues]
-    
-    TaskAgent -.->|Creates Issues| GH
-    TaskAgent -.->|Assigns| GameDev
-    TaskAgent -.->|Assigns| Frontend
-    TaskAgent -.->|Assigns| TestEng
-    TaskAgent -.->|Assigns| Security
-    TaskAgent -.->|Assigns| DocWriter
-    
-    style TaskAgent fill:#FFC107,stroke:#F57C00,stroke-width:3px,color:#000
-    style GameDev fill:#4CAF50
-    style Frontend fill:#2196F3
-    style TestEng fill:#FF9800
-    style Security fill:#D32F2F
-    style DocWriter fill:#9C27B0
+    Copilot --> Select{Select Agent}
+    Select -->|3D Game| GD[🎮 game-developer]
+    Select -->|React UI| FS[🎨 frontend-specialist]
+    Select -->|Testing| TE[🧪 test-engineer]
+    Select -->|Security| SS[🔒 security-specialist]
+    Select -->|Docs| DW[📝 documentation-writer]
+    Select -->|Analysis| PT[🎯 product-task-agent]
+    PT -.->|Creates Issues & Assigns| GD & FS & TE & SS & DW
 ```
 
-## 💡 How to Use
+## Usage
 
-When working with GitHub Copilot, request help from specific agents using natural language:
-
-**Example Requests:**
-```
-@workspace Use the product-task-agent to analyze the codebase and create improvement issues
-
-@workspace Ask the product-task-agent to review UI/UX and create accessibility issues
-
-@workspace Use the game-developer agent to create a new Three.js sprite component
-
-@workspace Ask the security-specialist to review this dependency for vulnerabilities
-
-@workspace Have the test-engineer write Vitest tests for this component
-
-@workspace Request the frontend-specialist to refactor this with React hooks
-
-@workspace Use the documentation-writer to create JSDoc comments for this API
+```text
+@workspace Use the game-developer agent to add a new particle effect
+@workspace Ask the test-engineer to improve test coverage for GameScene
+@workspace Have the security-specialist review dependencies
 ```
 
-The coding agent will automatically apply the specialized knowledge and guidelines from the relevant agent.
+## Resources
 
-### 🎯 Product Task Agent Usage
-
-The product-task-agent is your go-to for:
-- **Product Analysis:** Comprehensive quality, security, and UX assessment
-- **Issue Creation:** Creating structured GitHub issues with proper categorization
-- **Agent Coordination:** Assigning tasks to specialized agents
-- **ISMS Compliance:** Verifying alignment with Hack23 AB security policies
-
-**Example Workflows:**
-```
-@workspace Use product-task-agent to:
-- Analyze the codebase for quality improvements and create prioritized issues
-- Review UI/UX using Playwright and create accessibility enhancement issues
-- Check ISMS compliance and create security alignment issues
-- Identify test coverage gaps and assign to test-engineer
-- Review documentation completeness and assign to documentation-writer
-```
-
-## 🎓 Agent Skills Integration
-
-All agents now leverage **GitHub Copilot Skills** for consistent patterns:
-
-| Agent | Primary Skills | Secondary Skills | Description |
-|-------|---------------|------------------|-------------|
-| 🎯 product-task-agent | All skills | - | Comprehensive quality analysis across all domains using all 6 skills |
-| 🎮 game-developer | react-threejs-game, performance-optimization | testing-strategy, documentation-standards | Three.js patterns, 60fps optimization, testing, and documentation |
-| 🎨 frontend-specialist | documentation-standards, performance-optimization | testing-strategy, security-by-design | React UI, performance, testing, and secure coding |
-| 🧪 test-engineer | testing-strategy | react-threejs-game, performance-optimization, documentation-standards | Comprehensive testing, Three.js testing, performance testing, test docs |
-| 🔒 security-specialist | security-by-design, isms-compliance | documentation-standards, testing-strategy | Security, compliance, security docs, and security testing |
-| 📝 documentation-writer | documentation-standards | isms-compliance, security-by-design, testing-strategy | Clear docs with ISMS alignment, security docs, and test documentation |
-
-**See:** [Skills Documentation](../skills/README.md) for complete skill details
-
-## 🛠️ Agent Tools
-
-Each agent has access to specific tools based on their responsibilities:
-
-| Tool | Alias | Description | Agents |
-|------|-------|-------------|---------|
-| **view** | read | Read file contents, inspect code | All agents |
-| **edit** | edit | Modify existing files | All agents |
-| **create** | create | Create new files | 🎮 🎨 🧪 📝 |
-| **bash** | shell | Execute shell commands, run npm scripts, build, test | 🎮 🎨 🧪 🔒 |
-| **search_code** | search | Search codebase for patterns | 🧪 🔒 📝 |
-| **custom-agent** | - | Invoke other custom agents for specialized tasks | All agents |
-| **web** | - | Web search (requires configuration) | Available but not assigned |
-| **todo** | - | Task management (requires configuration) | Available but not assigned |
-
-### MCP Server Capabilities
-
-In addition to agent tools, all agents can leverage MCP (Model Context Protocol) servers configured in `.github/copilot-mcp.json`:
-
-- **📁 Filesystem Server:** Secure file access and project structure navigation
-- **🐙 GitHub Server:** Repository metadata, issues, PRs, and workflow status
-- **📋 Git Server:** Commit history, branches, and code evolution tracking
-- **💭 Memory Server:** Conversation context and session history
-- **🎭 Playwright Server:** Browser automation for testing and debugging
-- **🔍 Brave Search:** Documentation search (requires API key)
-
-MCP servers provide enhanced capabilities beyond basic agent tools, enabling agents to perform complex operations like browser automation, repository analysis, and contextual memory.
-
-## ⚙️ Agent Configuration
-
-Each agent is defined in a markdown file with YAML frontmatter:
-
-```yaml
----
-name: agent-name
-description: Brief description of agent expertise (max 200 chars)
-tools: ["view", "edit", "create", "bash"]
----
-
-You are the [Agent Name], a specialized expert in...
-
-## Core Expertise
-
-You specialize in:
-- Area 1
-- Area 2
-
-## Guidelines
-
-- Guideline 1
-- Guideline 2
-
-## Remember
-
-- Key principle 1
-- Key principle 2
-```
-
-### Required Properties
-
-- **name:** Lowercase with hyphens (e.g., `game-developer`)
-- **description:** Max 200 characters describing expertise
-- **tools:** Array of tool aliases the agent needs
-
-### Agent Design Principles
-
-✅ **Single Responsibility:** Each agent focuses on one domain
-✅ **Minimal Tools:** Only include tools the agent actually needs
-✅ **Clear Expertise:** Well-defined areas of specialization
-✅ **Consistent Standards:** All agents follow project guidelines in `.github/copilot-instructions.md`
-
-## 📊 Agent Specialization Matrix
-
-| Domain | Primary Agent | Secondary Agent | MCP Server |
-|--------|--------------|-----------------|------------|
-| Product Analysis | 🎯 product-task-agent | All agents | GitHub, Playwright |
-| Issue Management | 🎯 product-task-agent | - | GitHub |
-| Three.js/3D | 🎮 game-developer | 🧪 test-engineer | Playwright |
-| React/UI | 🎨 frontend-specialist | 🧪 test-engineer | Playwright |
-| Testing | 🧪 test-engineer | 🎮 🎨 | Playwright |
-| Security | 🔒 security-specialist | 🎯 product-task-agent | GitHub |
-| Documentation | 📝 documentation-writer | - | Filesystem |
-| ISMS Compliance | 🔒 security-specialist | 🎯 product-task-agent | GitHub |
-
-## 📚 Resources
-
-### Agent & Skills Documentation
-- [GitHub Copilot Agent Skills](../skills/README.md) - Reusable patterns and rules
-- [GitHub Copilot Custom Agents Documentation](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-custom-agents)
-- [About Agent Skills - GitHub Docs](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)
-
-### Repository Configuration
-- [Repository Custom Instructions](../copilot-instructions.md)
-- [MCP Configuration](../copilot-mcp.json)
-
-### External Resources
-- [Anthropic Skills Repository](https://github.com/anthropics/skills) - Best practices
-- [GitHub Awesome Copilot](https://github.com/github/awesome-copilot) - Community resources
-- [Hack23 ISMS-PUBLIC](https://github.com/Hack23/ISMS-PUBLIC) - Security policies
+- [Agent Skills](../skills/README.md) — reusable patterns
+- [Copilot Instructions](../copilot-instructions.md) — project-wide standards
+- [About Custom Agents](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-custom-agents)
