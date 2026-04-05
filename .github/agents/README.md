@@ -6,12 +6,12 @@ Custom agent configurations for GitHub Copilot coding agent, specialized for thi
 
 | Agent | Expertise | Tools |
 |-------|-----------|-------|
-| 🎮 **[game-developer](game-developer.md)** | Three.js + @react-three/fiber, game loops, 60fps performance | view, edit, create, bash |
-| 🎨 **[frontend-specialist](frontend-specialist.md)** | React 19, strict TypeScript, component architecture | view, edit, create, bash |
-| 🧪 **[test-engineer](test-engineer.md)** | Vitest, Cypress, React Testing Library, 80%+ coverage | view, edit, create, bash, search_code |
-| 🔒 **[security-specialist](security-specialist.md)** | OSSF Scorecard, SLSA, OWASP, ISMS compliance | view, edit, bash, search_code |
-| 📝 **[documentation-writer](documentation-writer.md)** | JSDoc, READMEs, Mermaid diagrams, ISMS docs | view, edit, create, search_code |
-| 🎯 **[product-task-agent](product-task-agent.md)** | Product analysis, issue creation, agent coordination | view, edit, create, bash, search_code |
+| 🎮 **[game-developer](game-developer.md)** | Three.js + @react-three/fiber, game loops, 60fps performance | view, edit, create, bash, custom-agent |
+| 🎨 **[frontend-specialist](frontend-specialist.md)** | React 19, strict TypeScript, component architecture | view, edit, create, bash, custom-agent |
+| 🧪 **[test-engineer](test-engineer.md)** | Vitest, Cypress, React Testing Library, 80%+ coverage | view, edit, create, bash, search_code, custom-agent |
+| 🔒 **[security-specialist](security-specialist.md)** | OSSF Scorecard, SLSA, OWASP, ISMS compliance | view, edit, bash, search_code, custom-agent |
+| 📝 **[documentation-writer](documentation-writer.md)** | JSDoc, READMEs, Mermaid diagrams, ISMS docs | view, edit, create, search_code, custom-agent |
+| 🎯 **[product-task-agent](product-task-agent.md)** | Product analysis, issue creation, agent coordination | view, edit, create, bash, search_code, custom-agent |
 
 ## Agent-Skill Integration
 

@@ -72,7 +72,7 @@ graph TB
 export function calc(x: number) { return x * 2; }
 
 // BAD: No @param or @returns
-/** Does calculation */ export function calc(x: number) { ... }
+/** Does calculation */ export function calc(x: number) { /* ... */ }
 
 // BAD: Broken/untested example in JSDoc
 ```

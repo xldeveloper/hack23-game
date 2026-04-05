@@ -32,12 +32,30 @@ Security-by-Design means building security into every phase, not as an afterthou
 ### ✅ Input Validation
 
 ```typescript
-/** Validates and sanitizes user input — ISMS Policy SC-002 */
-function sanitizeInput(input: unknown): string {
+/** Validates plain-text user input — ISMS Policy SC-002 */
+function validatePlainTextInput(input: unknown): string {
   if (typeof input !== 'string') throw new Error('Input must be a string');
-  if (input.length > 100) throw new Error('Input too long');
-  return input.replace(/[<>'"&]/g, ''); // Strip dangerous chars
+  const normalizedInput = input.trim();
+  if (normalizedInput.length === 0) throw new Error('Input is required');
+  if (normalizedInput.length > 100) throw new Error('Input too long');
+  return normalizedInput;
 }
+
+/** Encode untrusted data before inserting it into an HTML context */
+function escapeHtml(input: string): string {
+  return input
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+const plainText = validatePlainTextInput(userInput);
+const safeHtml = `<p>${escapeHtml(plainText)}</p>`;
+
+// For rich HTML, use a proven sanitizer such as DOMPurify instead of
+// relying on ad-hoc character stripping.
 ```
 
 ### ✅ Secure Error Handling

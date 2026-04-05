@@ -33,7 +33,21 @@ Applies when writing unit tests, E2E tests, testing Three.js components, mocking
 ```tsx
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { GameState } from '../hooks/useGameState';
+import { HUD } from './HUD';
+
+type GameState = {
+  score: number;
+  isPlaying: boolean;
+  timeLeft: number;
+  combo: number;
+  highScore: number;
+  targetSize: number;
+  level: number;
+  isNewHighScore: boolean;
+  targets: unknown[];
+  totalClicks: number;
+  successfulHits: number;
+};
 
 const mockGameState: GameState = {
   score: 42, isPlaying: true, timeLeft: 30, combo: 0,
