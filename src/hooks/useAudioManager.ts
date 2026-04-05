@@ -59,7 +59,7 @@ export function useAudioManager(): AudioManager {
         src: [generateToneDataURL(880, 0.12, 0.8)], // A5 note, 120ms, louder
         format: ['wav'],
         volume: 0.7,
-        onloaderror: (_id, error) => {
+        onloaderror: (_id: number, error: unknown): void => {
           console.error('Failed to load hit sound:', error);
         },
       });
@@ -69,7 +69,7 @@ export function useAudioManager(): AudioManager {
         src: [generateToneDataURL(1320, 0.2, 0.9)], // E6 note, 200ms
         format: ['wav'],
         volume: 0.8,
-        onloaderror: (_id, error) => {
+        onloaderror: (_id: number, error: unknown): void => {
           console.error('Failed to load combo sound:', error);
         },
       });
@@ -79,7 +79,7 @@ export function useAudioManager(): AudioManager {
         src: [generateToneDataURL(784, 0.4, 1)], // G5 note, 400ms
         format: ['wav'],
         volume: 0.85,
-        onloaderror: (_id, error) => {
+        onloaderror: (_id: number, error: unknown): void => {
           console.error('Failed to load level up sound:', error);
         },
       });
@@ -89,7 +89,7 @@ export function useAudioManager(): AudioManager {
         src: [generateToneDataURL(196, 0.6, 0.8)], // G3 note, 600ms
         format: ['wav'],
         volume: 0.7,
-        onloaderror: (_id, error) => {
+        onloaderror: (_id: number, error: unknown): void => {
           console.error('Failed to load game over sound:', error);
         },
       });
@@ -100,7 +100,7 @@ export function useAudioManager(): AudioManager {
         format: ['wav'],
         volume: 0.2,
         loop: true,
-        onloaderror: (_id, error) => {
+        onloaderror: (_id: number, error: unknown): void => {
           console.error('Failed to load background sound:', error);
         },
       });
