@@ -29,7 +29,7 @@ Structured, reusable patterns for GitHub Copilot coding agent. Skills are automa
 
 ## Skill Format
 
-```
+```text
 .github/skills/skill-name/
 └── SKILL.md    # YAML frontmatter + Context + Rules + Examples
 ```

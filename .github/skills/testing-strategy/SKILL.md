@@ -87,6 +87,7 @@ describe('gameConfig', () => {
 
 ```tsx
 import type { ReactNode } from 'react';
+import { vi } from 'vitest';
 
 vi.mock('@react-three/fiber', () => ({
   Canvas: ({ children }: { children: ReactNode }) => <div>{children}</div>,

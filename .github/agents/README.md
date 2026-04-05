@@ -41,7 +41,7 @@ graph TB
 
 ## Usage
 
-```
+```text
 @workspace Use the game-developer agent to add a new particle effect
 @workspace Ask the test-engineer to improve test coverage for GameScene
 @workspace Have the security-specialist review dependencies

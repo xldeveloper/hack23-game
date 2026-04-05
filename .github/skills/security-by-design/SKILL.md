@@ -51,6 +51,7 @@ function escapeHtml(input: string): string {
     .replace(/'/g, '&#39;');
 }
 
+const userInput = '  Hello <script>alert("xss")</script>  ';
 const plainText = validatePlainTextInput(userInput);
 const safeHtml = `<p>${escapeHtml(plainText)}</p>`;
 

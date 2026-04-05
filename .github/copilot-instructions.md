@@ -21,7 +21,7 @@ npm run test:licenses # License compliance check
 
 ## Project Structure
 
-```
+```text
 src/
 ├── App.tsx                    # Root: game loop, audio, overlays
 ├── components/
