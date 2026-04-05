@@ -29,7 +29,7 @@ Applies when building performance-sensitive features, optimizing re-renders, red
 
 ### ✅ Memoized Component
 
-```typescript
+```tsx
 import { memo, useMemo, useCallback } from 'react';
 
 interface HUDProps {
@@ -54,9 +54,10 @@ export const GameHUD = memo(({ score, health, onPause }: HUDProps): JSX.Element 
 
 ### ✅ Ref-based Animation (No Re-renders)
 
-```typescript
+```tsx
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 
 function AnimatedObject(): JSX.Element {
   const meshRef = useRef<THREE.Mesh>(null);
@@ -70,13 +71,13 @@ function AnimatedObject(): JSX.Element {
 
 ### ❌ Anti-Patterns
 
-```typescript
+```tsx
 // BAD: useState in useFrame — 60 re-renders/sec!
 useFrame(() => { setRotation(r => r + 0.01); });
 
 // BAD: New object every render
-<mesh position={[0, 0, 0]}> // Creates new array each render
-// GOOD: const POS = [0, 0, 0] as const; outside component
+<mesh position={[0, 0, 0]}> {/* Creates new array each render */}
+{/* GOOD: const POS = [0, 0, 0] as const; outside component */}
 
 // BAD: Unmemoized expensive calc
 const sorted = data.sort((a, b) => a - b); // Sorts every render

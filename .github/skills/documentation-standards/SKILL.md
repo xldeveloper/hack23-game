@@ -52,7 +52,7 @@ export function getTargetCountForLevel(level: number): number {
 ### ✅ Mermaid Architecture Diagram
 
 ```markdown
-​```mermaid
+```mermaid
 graph TB
   App[App.tsx] --> Canvas[Canvas]
   App --> HUD[HUD]
@@ -62,7 +62,7 @@ graph TB
   Scene --> Particles[BackgroundParticles]
   App --> useGameState[useGameState]
   App --> useAudio[useAudioManager]
-​```
+```
 ```
 
 ### ❌ Anti-Patterns

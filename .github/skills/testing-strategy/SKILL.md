@@ -30,15 +30,22 @@ Applies when writing unit tests, E2E tests, testing Three.js components, mocking
 
 ### ✅ Component Test with RTL
 
-```typescript
+```tsx
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { GameState } from '../hooks/useGameState';
+
+const mockGameState: GameState = {
+  score: 42, isPlaying: true, timeLeft: 30, combo: 0,
+  highScore: 100, targetSize: 0.5, level: 1, isNewHighScore: false,
+  targets: [], totalClicks: 10, successfulHits: 5,
+};
 
 describe('HUD', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
   it('should display current score', () => {
-    render(<HUD gameState={{ score: 42, timeLeft: 30 }} />);
+    render(<HUD gameState={mockGameState} />);
     expect(screen.getByText(/42/)).toBeInTheDocument();
   });
 });
@@ -64,9 +71,11 @@ describe('gameConfig', () => {
 
 ### ✅ Three.js Mock
 
-```typescript
+```tsx
+import type { ReactNode } from 'react';
+
 vi.mock('@react-three/fiber', () => ({
-  Canvas: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  Canvas: ({ children }: { children: ReactNode }) => <div>{children}</div>,
   useFrame: vi.fn(),
   useThree: () => ({ camera: {}, scene: {}, gl: {} }),
 }));
@@ -82,7 +91,7 @@ expect(component.state.internalValue).toBe(5);
 expect(result).toBe(Math.random());
 
 // BAD: Vague name
-it('works', () => { ... });
+it('works', () => { /* test omitted */ });
 
 // BAD: Shared state between tests
 let counter = 0;
