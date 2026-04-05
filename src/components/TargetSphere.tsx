@@ -48,27 +48,29 @@ export function TargetSphere({ position, onClick, isActive, size }: TargetSphere
 
   // Enhanced rotation and pulse animation
   useFrame((state, delta) => {
-    if (!isActive || !meshRef.current) return;
+    if (!meshRef.current) return;
 
-    meshRef.current.rotation.y += delta * 1.2;
-    meshRef.current.rotation.x += delta * 0.6;
+    if (isActive) {
+      meshRef.current.rotation.y += delta * 1.2;
+      meshRef.current.rotation.x += delta * 0.6;
 
-    // Animate rings
-    if (outerRingRef.current) {
-      outerRingRef.current.rotation.z += delta * 0.9;
+      // Animate rings
+      if (outerRingRef.current) {
+        outerRingRef.current.rotation.z += delta * 0.9;
+      }
+      if (middleRingRef.current) {
+        middleRingRef.current.rotation.z -= delta * 1.2;
+      }
+
+      // Pulsing effect for hover state - use ref to avoid re-renders
+      if (hovered) {
+        pulseScaleRef.current = 1 + Math.sin(state.clock.elapsedTime * 5) * 0.1;
+      } else {
+        pulseScaleRef.current = 1;
+      }
     }
-    if (middleRingRef.current) {
-      middleRingRef.current.rotation.z -= delta * 1.2;
-    }
 
-    // Pulsing effect for hover state - use ref to avoid re-renders
-    if (hovered) {
-      pulseScaleRef.current = 1 + Math.sin(state.clock.elapsedTime * 5) * 0.1;
-    } else {
-      pulseScaleRef.current = 1;
-    }
-
-    // Apply scale directly via ref (no React re-render)
+    // Always apply scale so inactive state (0.6) is correctly set
     const targetScale = isActive ? (hovered ? 1.4 * pulseScaleRef.current : 1) : 0.6;
     meshRef.current.scale.setScalar(targetScale);
   });

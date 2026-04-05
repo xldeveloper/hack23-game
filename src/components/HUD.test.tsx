@@ -1,16 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { HUD } from "./HUD";
 import type { GameState } from "../hooks/useGameState";
-
-// Mock calculateAccuracy to control output
-vi.mock("../utils/gameConfig", async () => {
-  const actual = await vi.importActual<typeof import("../utils/gameConfig")>("../utils/gameConfig");
-  return {
-    ...actual,
-  };
-});
 
 function createGameState(overrides?: Partial<GameState>): GameState {
   return {

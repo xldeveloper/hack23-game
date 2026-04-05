@@ -90,16 +90,23 @@ function App(): JSX.Element {
 
   // Expose test API for E2E tests to trigger target clicks.
   // This bypasses Three.js raycasting which doesn't work reliably in headless CI.
+  // Use refs so the listener is registered once and reads latest state/handler.
+  const handleTargetClickRef = useRef(handleTargetClick);
+  handleTargetClickRef.current = handleTargetClick;
+  const gameStateRef = useRef(gameState);
+  gameStateRef.current = gameState;
+
   useEffect(() => {
     const handleTestTargetClick = (): void => {
-      if (gameState.isPlaying && gameState.timeLeft > 0 && gameState.targets.length > 0) {
-        handleTargetClick(gameState.targets[0]?.id ?? 0);
+      const gs = gameStateRef.current;
+      if (gs.isPlaying && gs.timeLeft > 0 && gs.targets.length > 0) {
+        handleTargetClickRef.current(gs.targets[0]?.id ?? 0);
       }
     };
 
     window.addEventListener("test:targetClick", handleTestTargetClick);
     return (): void => window.removeEventListener("test:targetClick", handleTestTargetClick);
-  }, [handleTargetClick, gameState.isPlaying, gameState.timeLeft, gameState.targets]);
+  }, []);
 
   const handleMuteToggle = useCallback((): void => {
     const newMuted = !isMuted;

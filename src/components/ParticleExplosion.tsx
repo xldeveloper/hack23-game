@@ -1,5 +1,5 @@
 import { useFrame } from "@react-three/fiber";
-import { useRef, useState, useMemo } from "react";
+import { useRef, useMemo } from "react";
 import type { JSX } from "react";
 import * as THREE from "three";
 
@@ -64,13 +64,19 @@ export interface ParticleExplosionProps {
  */
 export function ParticleExplosion({ position, active }: ParticleExplosionProps): JSX.Element | null {
   const particlesRef = useRef<THREE.Points>(null);
-  const [visible, setVisible] = useState(active);
+  const visibleRef = useRef(active);
   const startTimeRef = useRef(0);
 
   const particleData = useMemo(() => generateParticleData(), []);
 
+  // Reset visibility when a new explosion is triggered
+  if (active && !visibleRef.current) {
+    visibleRef.current = true;
+    startTimeRef.current = 0;
+  }
+
   useFrame((state) => {
-    if (!active || !particlesRef.current) return;
+    if (!visibleRef.current || !particlesRef.current) return;
 
     if (startTimeRef.current === 0) {
       startTimeRef.current = state.clock.elapsedTime;
@@ -101,12 +107,12 @@ export function ParticleExplosion({ position, active }: ParticleExplosionProps):
       const opacity = 1 - elapsed / duration;
       (particlesRef.current.material as THREE.PointsMaterial).opacity = opacity;
     } else {
-      setVisible(false);
+      visibleRef.current = false;
       startTimeRef.current = 0;
     }
   });
 
-  if (!visible && !active) return null;
+  if (!visibleRef.current) return null;
 
   return (
     <points ref={particlesRef} position={position}>
