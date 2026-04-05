@@ -62,10 +62,14 @@ const safeHtml = `<p>${escapeHtml(plainText)}</p>`;
 ### ✅ Secure Error Handling
 
 ```typescript
-// CORRECT: Generic message to user, details in server log
-catch (error: unknown) {
-  console.error('Internal error:', error);
-  return { error: 'An error occurred. Please try again.' };
+function handleRequest(): { success?: true; error?: string } {
+  try {
+    // Perform the requested operation here
+    return { success: true };
+  } catch (error: unknown) {
+    console.error('Internal error:', error);
+    return { error: 'An error occurred. Please try again.' };
+  }
 }
 ```
 
@@ -73,7 +77,7 @@ catch (error: unknown) {
 
 ```typescript
 // BAD: Hardcoded secret
-const API_KEY = "sk-abc123";
+const API_KEY = "<API_KEY>";
 
 // BAD: Leaking stack trace
 res.status(500).json({ error: error.stack });
