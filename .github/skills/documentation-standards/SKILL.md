@@ -75,4 +75,13 @@ export function calc(x: number) { return x * 2; }
 /** Does calculation */ export function calc(x: number) { /* ... */ }
 
 // BAD: Broken/untested example in JSDoc
+/**
+ * Doubles a number.
+ *
+ * @example
+ * ```typescript
+ * calc("2"); // 4
+ * ```
+ */
+export function calc(value: number): number { return value * 2; }
 ```

@@ -66,8 +66,11 @@ function handleRequest(): { success?: true; error?: string } {
   try {
     // Perform the requested operation here
     return { success: true };
-  } catch (error: unknown) {
-    console.error('Internal error:', error);
+  } catch {
+    // In browser code, avoid logging raw error details to the console because
+    // end users can access them. Send detailed diagnostics to restricted
+    // server-side logs or monitoring instead.
+    console.warn('Request failed');
     return { error: 'An error occurred. Please try again.' };
   }
 }
@@ -79,9 +82,12 @@ function handleRequest(): { success?: true; error?: string } {
 // BAD: Hardcoded secret
 const API_KEY = "<API_KEY>";
 
-// BAD: Leaking stack trace
-res.status(500).json({ error: error.stack });
+// BAD: Leaking stack trace to user
+function handleError(error: Error): { error: string } {
+  return { error: error.stack ?? 'Unknown error' }; // Exposes internals!
+}
 
-// BAD: No input validation
-document.innerHTML = userInput; // XSS!
+// BAD: No input validation — XSS vulnerability
+const userContent = '<img src=x onerror=alert(1)>';
+document.body.innerHTML = userContent;
 ```

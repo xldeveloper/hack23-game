@@ -38,7 +38,8 @@ interface HUDProps {
   onPause: () => void;
 }
 
-export const GameHUD = memo(({ score, health, onPause }: HUDProps): JSX.Element => {
+/** Memoized HUD — only re-renders when props change */
+function GameHUDInner({ score, health, onPause }: HUDProps): JSX.Element {
   const healthColor = useMemo(() => health > 50 ? '#0f0' : '#f00', [health]);
   const handlePause = useCallback(() => onPause(), [onPause]);
 
@@ -49,7 +50,9 @@ export const GameHUD = memo(({ score, health, onPause }: HUDProps): JSX.Element 
       <button onClick={handlePause}>Pause</button>
     </div>
   );
-});
+}
+
+export const GameHUD = memo(GameHUDInner);
 ```
 
 ### ✅ Ref-based Animation (No Re-renders)
