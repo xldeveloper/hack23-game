@@ -32,15 +32,9 @@ export default defineConfig({
     },
   },
   resolve: {
-    alias: {
-      // Fix react-reconciler module resolution
-      "react-reconciler/constants": "react-reconciler/constants.js",
-    },
+    alias: {},
   },
   optimizeDeps: {
-    include: ["@pixi/react", "pixi.js", "react-reconciler"],
-  },
-  ssr: {
-    noExternal: ["@pixi/react", "pixi.js"],
+    include: ["three", "@react-three/fiber", "@react-three/drei"],
   },
 });

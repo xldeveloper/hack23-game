@@ -41,55 +41,6 @@
   color: #888;
 }
 
-.app-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: #0d1117;
-  color: white;
-  overflow: hidden;
-}
-
-.app-container h1 {
-  font-size: 2.5em;
-  line-height: 1.1;
-  margin: 0;
-  color: #646cff;
-  margin: 10px 0;
-  font-size: 24px;
-}
-
-.app-container canvas {
-  border: 2px solid #646cff;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: block;
-  width: 100% !important;
-  height: calc(100vh - 100px) !important;
-  max-height: none;
-  max-width: none;
-  border: none;
-}
-
-.instructions {
-  color: #888;
-  font-style: italic;
-  margin: 0;
-  margin: 8px 0;
-  font-size: 14px;
-  color: #8b949e;
-}
-
 /* Ensure fullscreen across different devices */
 html,
 body,
@@ -99,30 +50,29 @@ body,
   margin: 0;
   padding: 0;
   overflow: hidden;
-}
-
-body,
-html {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
   background-color: #0d1117;
 }
 
 .app-container {
   width: 100%;
   height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+  gap: 1rem;
+  background-color: #0d1117;
   color: white;
+  overflow: hidden;
 }
 
 .app-container h1 {
   margin: 10px 0;
   font-size: 24px;
+  line-height: 1.1;
   color: #646cff;
 }
 
@@ -132,18 +82,23 @@ html {
   height: calc(100vh - 100px) !important;
   max-height: none !important;
   max-width: none !important;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: crosshair;
 }
 
 .instructions {
   margin: 8px 0;
   font-size: 14px;
+  font-style: italic;
   color: #8b949e;
 }
 
 /* Animation for pulse effect */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
@@ -155,11 +110,13 @@ html {
 
 /* Animation for glow effect */
 @keyframes glow {
-  0%, 100% {
+  0%,
+  100% {
     text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
   }
   50% {
-    text-shadow: 0 0 20px rgba(0, 255, 136, 0.8), 0 0 30px rgba(0, 255, 136, 0.5);
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.8),
+      0 0 30px rgba(0, 255, 136, 0.5);
   }
 }
 
