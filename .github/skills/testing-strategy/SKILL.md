@@ -18,7 +18,7 @@ Applies when writing unit tests, E2E tests, testing Three.js components, mocking
 5. **Mock External Dependencies**: APIs, timers, Three.js renderer — with proper TypeScript types
 6. **Test Error Cases**: Both success and failure paths
 7. **Test Edge Cases**: Boundary conditions, empty inputs, null/undefined
-8. **React Testing Library**: Query by role/text, not implementation details
+8. **React Testing Library**: Prefer role/text queries; when components expose stable test IDs, using `data-testid` selectors is acceptable
 9. **Test Logic Not Rendering**: For Three.js, test state/logic, mock renderer
 10. **Isolate Tests**: Independent, no shared state, `vi.clearAllMocks()` in beforeEach
 11. **Descriptive Names**: "should [behavior] when [condition]"
@@ -93,6 +93,11 @@ vi.mock('@react-three/fiber', () => ({
   Canvas: ({ children }: { children: ReactNode }) => <div>{children}</div>,
   useFrame: vi.fn(),
   useThree: () => ({ camera: {}, scene: {}, gl: {} }),
+}));
+
+vi.mock('@react-three/drei', () => ({
+  Sparkles: ({ children }: { children?: ReactNode }) => <>{children}</>,
+  Trail: ({ children }: { children?: ReactNode }) => <>{children}</>,
 }));
 ```
 

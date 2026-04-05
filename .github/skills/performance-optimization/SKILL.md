@@ -79,8 +79,10 @@ function AnimatedObject(): JSX.Element {
 useFrame(() => { setRotation(r => r + 0.01); });
 
 // BAD: New object every render
-<mesh position={[0, 0, 0]}> {/* Creates new array each render */}
-{/* GOOD: const POS = [0, 0, 0] as const; outside component */}
+<mesh position={[0, 0, 0]}>
+  {/* Creates new array each render */}
+  {/* GOOD: const POS = [0, 0, 0] as const; outside component */}
+</mesh>
 
 // BAD: Unmemoized expensive calc
 const sorted = data.sort((a, b) => a - b); // Sorts every render

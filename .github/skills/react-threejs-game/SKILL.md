@@ -28,7 +28,7 @@ Applies when building 3D game scenes, implementing game loops, handling 3D inter
 
 ### ✅ Typed Game Object with useFrame
 
-```typescript
+```tsx
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
