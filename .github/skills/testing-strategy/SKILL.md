@@ -1,71 +1,62 @@
 ---
 name: testing-strategy
-description: Comprehensive testing with Vitest, Cypress, and React Testing Library targeting 80%+ coverage with Three.js component testing
+description: Vitest + Cypress + RTL — deterministic tests, ≥80% line / ≥70% branch coverage, ≥95% on security code, Three.js component testing
 license: MIT
 ---
 
 # Testing Strategy Skill
 
 ## Context
-Applies when writing unit tests, E2E tests, testing Three.js components, mocking dependencies, measuring coverage, or debugging test failures.
+
+Applies when writing unit tests, E2E tests, testing Three.js components, mocking dependencies, measuring coverage, diagnosing flakes, or preparing test data.
+
+Aligned with [Secure Development Policy §Unit Test Coverage & Quality](https://github.com/Hack23/ISMS-PUBLIC/blob/main/Secure_Development_Policy.md).
 
 ## Rules
 
-1. **80%+ Coverage**: Minimum across lines, branches, functions, statements
-2. **Test Pyramid**: Most unit tests, fewer integration, fewest E2E
-3. **Behavior Not Implementation**: Test what code does, not how
-4. **AAA Pattern**: Arrange (setup), Act (execute), Assert (verify)
-5. **Mock External Dependencies**: APIs, timers, Three.js renderer — with proper TypeScript types
-6. **Test Error Cases**: Both success and failure paths
-7. **Test Edge Cases**: Boundary conditions, empty inputs, null/undefined
-8. **React Testing Library**: Prefer role/text queries; when components expose stable test IDs, using `data-testid` selectors is acceptable
-9. **Test Logic Not Rendering**: For Three.js, test state/logic, mock renderer
-10. **Isolate Tests**: Independent, no shared state, `vi.clearAllMocks()` in beforeEach
-11. **Descriptive Names**: "should [behavior] when [condition]"
-12. **Deterministic**: Mock `Date.now()`, `Math.random()`, timers. No real network calls
-13. **Keep Tests Fast**: Unit in ms, E2E in seconds
-14. **CI Must Pass**: All tests must pass before merge
+1. **≥ 80 % line / ≥ 70 % branch coverage** across every module
+2. **≥ 95 % coverage** on security-sensitive code (input validation, encoding, auth/authorization)
+3. **Test pyramid** — many unit, fewer integration, fewest E2E
+4. **Behavior, not implementation** — query by role/text; avoid internal-state checks
+5. **AAA pattern** — Arrange → Act → Assert; one behavior per test
+6. **Mock external dependencies** — APIs, timers, Three.js renderer — with proper types
+7. **Cover error and edge cases** — not just the happy path
+8. **React Testing Library** — prefer role/text queries; stable `data-testid` allowed on intent
+9. **Test logic, not WebGL** — for Three.js, test state/logic; mock the renderer
+10. **Isolate tests** — no shared mutable state; `vi.clearAllMocks()` in `beforeEach`
+11. **Descriptive names** — "should \<behavior\> when \<condition\>"
+12. **Deterministic** — mock `Date.now`, `Math.random`, timers; no real network
+13. **Fast** — unit tests in ms, E2E in seconds; parallelize where safe
+14. **No flaky tests** — fix the root cause, never retry blindly
+15. **No production / PII data in tests** — anonymize or synthesize (per SDP §Test Data Protection)
+16. **CI must pass** — no merging red
 
 ## Examples
 
-### ✅ Component Test with RTL
+### ✅ Component test with RTL
 
 ```tsx
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { HUD } from './HUD';
 
-type GameState = {
-  score: number;
-  isPlaying: boolean;
-  timeLeft: number;
-  combo: number;
-  highScore: number;
-  targetSize: number;
-  level: number;
-  isNewHighScore: boolean;
-  targets: unknown[];
-  totalClicks: number;
-  successfulHits: number;
-};
-
-const mockGameState: GameState = {
+const mockGameState = {
   score: 42, isPlaying: true, timeLeft: 30, combo: 0,
   highScore: 100, targetSize: 0.5, level: 1, isNewHighScore: false,
-  targets: [], totalClicks: 10, successfulHits: 5,
-};
+  targets: [] as unknown[], totalClicks: 10, successfulHits: 5,
+} as const;
 
 describe('HUD', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
-  it('should display current score', () => {
+  it('should display the current score', () => {
     render(<HUD gameState={mockGameState} />);
     expect(screen.getByText(/42/)).toBeInTheDocument();
   });
 });
 ```
 
-### ✅ Game Logic Test (Pure Function)
+### ✅ Pure-function (no Three.js) test
 
 ```typescript
 import { describe, it, expect } from 'vitest';
@@ -83,7 +74,7 @@ describe('gameConfig', () => {
 });
 ```
 
-### ✅ Three.js Mock
+### ✅ Mocking Three.js
 
 ```tsx
 import type { ReactNode } from 'react';
@@ -101,20 +92,64 @@ vi.mock('@react-three/drei', () => ({
 }));
 ```
 
+### ✅ Deterministic RNG
+
+```typescript
+import { vi, afterEach } from 'vitest';
+
+beforeEach(() => {
+  const seq = [0.1, 0.2, 0.3];
+  let i = 0;
+  vi.spyOn(Math, 'random').mockImplementation(() => seq[i++ % seq.length]);
+});
+
+afterEach(() => { vi.restoreAllMocks(); });
+```
+
+### ✅ Security-path test (failure mode)
+
+```typescript
+it('should reject non-finite scores', () => {
+  expect(() => saveHighScore(Number.NaN)).toThrow(RangeError);
+  expect(() => saveHighScore(Infinity)).toThrow(RangeError);
+  expect(() => saveHighScore(-1)).toThrow(RangeError);
+});
+```
+
 ### ❌ Anti-Patterns
 
 ```typescript
-// BAD: Testing implementation
+// BAD: testing implementation
 expect(component.state.internalValue).toBe(5);
 
-// BAD: Non-deterministic
+// BAD: non-deterministic
 expect(result).toBe(Math.random());
 
-// BAD: Vague name
-it('works', () => { /* test omitted */ });
+// BAD: vague test name
+it('works', () => { /* … */ });
 
-// BAD: Shared state between tests
+// BAD: shared state between tests
 let counter = 0;
-it('test1', () => { counter++; });
-it('test2', () => { expect(counter).toBe(1); }); // Order dependent!
+it('t1', () => { counter++; });
+it('t2', () => { expect(counter).toBe(1); }); // order-dependent!
+
+// BAD: production data
+const user = { email: 'real.user@company.com' }; // PII in tests
 ```
+
+## Flaky-Test Triage
+
+1. Reproduce locally with the same seed/time
+2. Classify: timing / network / shared-state / order-dependence
+3. Fix at the root (fake timers / explicit mocks / cleanup); never `retry` as a workaround
+4. Add a regression test for the fix
+
+## Validation Checklist
+
+- [ ] ≥ 80 % line / ≥ 70 % branch coverage on changed modules
+- [ ] ≥ 95 % coverage on security-sensitive code
+- [ ] Deterministic (no real clocks, RNG, network)
+- [ ] Three.js mocked in unit tests; logic tested in `src/utils/`
+- [ ] E2E covers at least one critical user flow for the feature
+- [ ] No production / PII data in fixtures
+- [ ] CI green locally (`npm run test:ci`, `npm run test:e2e:ci`)
